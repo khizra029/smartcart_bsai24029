@@ -1,0 +1,16 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Database local files
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+website/__pycache__/
+*.pyc
+.env
+website/config_local.py

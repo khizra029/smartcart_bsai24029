@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ product.product_name }} — SmartCart{% endblock %}
+
+{% block content %}
+<section class="container product-page">
+    <a href="{{ url_for('home') }}" class="back-link">← Back to shop</a>
+
+    <div class="product-detail">
+        <div class="product-detail-image">
+            <span class="product-emoji large">🛍️</span>
+        </div>
+        <div class="product-detail-info">
+            <span class="category-tag">{{ product.category_name }}</span>
+            <h1>{{ product.product_name }}</h1>
+            <div class="rating">
+                {% if product.review_count > 0 %}
+                    ★ {{ '%.1f'|format(product.avg_rating) }} · {{ product.review_count }} review(s)
+                {% else %}
+                    No reviews yet
+                {% endif %}
+            </div>
+            <p class="price large">Rs. {{ '{:,.0f}'.format(product.unit_price) }}</p>
+            <p class="desc-full">{{ product.description }}</p>
+            <p class="stock-info">
+                {% if product.stock_qty > 0 %}
+                    <span class="in-stock">✓ In stock ({{ product.stock_qty }} available)</span>
+                {% else %}
+                    <span class="out-stock">✗ Out of stock</span>
+                {% endif %}
+            </p>
+
+            {% if product.stock_qty > 0 %}
+                {% if session.get('customer_id') %}
+                <form class="buy-form" action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="post">
+                    <label>Quantity</label>
+                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_qty }}">
+                    <button type="submit" class="btn btn-cart btn-lg">Add to Cart</button>
+                </form>
+                <form class="buy-form" action="{{ url_for('buy_now', product_id=product.product_id) }}" method="post">
+                    <input type="hidden" name="quantity" value="1" id="buy-qty">
+                    <button type="submit" class="btn btn-buy btn-lg">Buy Now</button>
+                </form>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login to Purchase</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if reviews %}
+    <section class="reviews-section">
+        <h2>Customer Reviews</h2>
+        {% for review in reviews %}
+        <div class="review-card">
+            <div class="review-header">
+                <strong>{{ review.full_name }}</strong>
+                <span>★ {{ review.rating }}</span>
+            </div>
+            <p>{{ review.review_text }}</p>
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+</section>
+{% endblock %}

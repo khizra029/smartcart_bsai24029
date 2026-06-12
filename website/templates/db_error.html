@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Database Connection Error{% endblock %}
+
+{% block content %}
+<section class="container auth-page">
+    <div class="auth-card wide">
+        <h1>Database Connection Error</h1>
+        <p class="auth-sub">The website could not connect to MySQL.</p>
+
+        <div class="demo-box">
+            <p><strong>Fix this in MySQL Workbench:</strong></p>
+            <ol style="text-align:left; margin: 12px 0 12px 20px; line-height: 1.8;">
+                <li>Open Workbench and connect to Local instance MySQL80</li>
+                <li>Open file: <code>sql/create_web_user.sql</code></li>
+                <li>Execute the whole script</li>
+                <li>Stop the website (Ctrl+C) and run <code>python app.py</code> again</li>
+            </ol>
+        </div>
+
+        <p><strong>Expected login in config_local.py:</strong></p>
+        <p>User: <code>smartcart</code> · Password: <code>SmartCart123!</code> · Database: <code>smartcart_db</code></p>
+
+        <p class="muted" style="margin-top:16px; font-size:0.85rem;">Technical details: {{ error }}</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Shop — SmartCart{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>Shop smarter with SmartCart</h1>
+        <p>Electronics, clothing, footwear & more — delivered to your door.</p>
+    </div>
+</section>
+
+<section class="container shop-layout">
+    <aside class="sidebar">
+        <h3>Categories</h3>
+        <ul class="category-list">
+            <li>
+                <a href="{{ url_for('home') }}" class="{{ 'active' if not active_category else '' }}">All Products</a>
+            </li>
+            {% for cat in categories %}
+            <li>
+                <a href="{{ url_for('home', category=cat.category_id) }}"
+                   class="{{ 'active' if active_category == cat.category_id else '' }}">
+                    {{ cat.category_name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <div class="products-section">
+        <div class="section-header">
+            <h2>
+                {% if search %}
+                    Results for "{{ search }}"
+                {% elif active_category_name %}
+                    {{ active_category_name }}
+                {% else %}
+                    All Products
+                {% endif %}
+            </h2>
+            <span class="count">{{ products|length }} items</span>
+        </div>
+
+        {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
+            <article class="product-card">
+                <div class="product-image">
+                    <span class="product-emoji">{{ ['📱','👕','👟','👜','🍳','🔌'][loop.index0 % 6] }}</span>
+                    {% if product.stock_qty == 0 %}
+                        <span class="stock-badge out">Out of Stock</span>
+                    {% elif product.stock_qty < 10 %}
+                        <span class="stock-badge low">Low Stock</span>
+                    {% endif %}
+                </div>
+                <div class="product-body">
+                    <span class="category-tag">{{ product.category_name }}</span>
+                    <h3><a href="{{ url_for('product_detail', product_id=product.product_id) }}">{{ product.product_name }}</a></h3>
+                    <p class="desc">{{ product.description[:60] }}{% if product.description|length > 60 %}...{% endif %}</p>
+                    <div class="rating">
+                        {% if product.review_count > 0 %}
+                            ★ {{ '%.1f'|format(product.avg_rating) }} ({{ product.review_count }})
+                        {% else %}
+                            <span class="muted">No reviews yet</span>
+                        {% endif %}
+                    </div>
+                    <div class="price-row">
+                        <span class="price">Rs. {{ '{:,.0f}'.format(product.unit_price) }}</span>
+                    </div>
+                    <div class="card-actions">
+                        {% if product.stock_qty > 0 %}
+                            {% if session.get('customer_id') %}
+                            <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="post">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-cart">Add to Cart</button>
+                            </form>
+                            <form action="{{ url_for('buy_now', product_id=product.product_id) }}" method="post">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-buy">Buy Now</button>
+                            </form>
+                            {% else %}
+                            <a href="{{ url_for('login') }}" class="btn btn-cart">Login to Buy</a>
+                            {% endif %}
+                        {% else %}
+                            <button class="btn btn-disabled" disabled>Sold Out</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No products found.</p>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Browse All</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

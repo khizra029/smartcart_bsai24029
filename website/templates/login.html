@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Login — SmartCart{% endblock %}
+
+{% block content %}
+<section class="container auth-page">
+    <div class="auth-card">
+        <h1>Welcome Back</h1>
+        <p class="auth-sub">Login to shop and track your orders</p>
+
+        <form method="post" class="auth-form">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" required placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Your password">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg full-width">Login</button>
+        </form>
+
+        <div class="demo-box">
+            <p><strong>Demo accounts:</strong></p>
+            <p>khizra@example.com / password123</p>
+            <p>ali@example.com / password123</p>
+        </div>
+
+        <p class="auth-footer">Don't have an account? <a href="{{ url_for('register') }}">Sign up</a></p>
+    </div>
+</section>
+{% endblock %}

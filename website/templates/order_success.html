@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed — SmartCart{% endblock %}
+
+{% block content %}
+<section class="container page-section success-page">
+    <div class="success-icon">✓</div>
+    <h1>Order Placed Successfully!</h1>
+    <p class="order-id">Order #{{ order.order_id }}</p>
+    <p>Thank you, {{ order.full_name }}! Your order is being processed.</p>
+
+    <div class="order-details-box">
+        <h3>Order Details</h3>
+        <p><strong>Status:</strong> {{ order.order_status|capitalize }}</p>
+        <p><strong>Shipping:</strong> {{ order.shipping_address }}</p>
+        <p><strong>Total:</strong> Rs. {{ '{:,.0f}'.format(order.total_amount) }}</p>
+
+        <table class="order-table">
+            <thead>
+                <tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+                {% for item in details %}
+                <tr>
+                    <td>{{ item.product_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>Rs. {{ '{:,.0f}'.format(item.unit_price) }}</td>
+                    <td>Rs. {{ '{:,.0f}'.format(item.line_total) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="success-actions">
+        <a href="{{ url_for('orders') }}" class="btn btn-primary">View My Orders</a>
+        <a href="{{ url_for('home') }}" class="btn btn-outline">Continue Shopping</a>
+    </div>
+</section>
+{% endblock %}
