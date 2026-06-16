@@ -2,5 +2,5 @@
 # Workbench may connect without asking, but Python needs the password.
 
 DB_OVERRIDES = {
-    "password": "PUT_YOUR_MYSQL_PASSWORD_HERE",
+    "password": "SmartCart123!",
 }

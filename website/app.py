@@ -514,5 +514,15 @@ def logout():
     return redirect(url_for("home"))
 
 
+try:
+    from init_db import ensure_database_initialized
+
+    ensure_database_initialized()
+except Exception as exc:
+    import logging
+
+    logging.getLogger(__name__).warning("Database auto-init skipped or failed: %s", exc)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
